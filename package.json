@@ -1,0 +1,101 @@
+{
+  "name": "agent-messenger",
+  "version": "0.2.23",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "server": "node --experimental-strip-types --experimental-sqlite --disable-warning=ExperimentalWarning server/main.ts",
+    "daemon": "node --experimental-strip-types --disable-warning=ExperimentalWarning daemon/main.ts",
+    "setup": "node --experimental-strip-types --disable-warning=ExperimentalWarning daemon/setup.ts",
+    "doctor": "node --experimental-strip-types --disable-warning=ExperimentalWarning daemon/doctor.ts",
+    "test": "node --experimental-strip-types --experimental-sqlite --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\"",
+    "package:daemon": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/package-daemon.ts",
+    "service:install": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/service.ts install",
+    "service:remove": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/service.ts remove",
+    "reset-password": "node --experimental-strip-types --experimental-sqlite --disable-warning=ExperimentalWarning server/reset-password.ts",
+    "desktop:build": "node scripts/build-desktop.mjs",
+    "desktop": "npm run desktop:build && electron .",
+    "package:app": "npm run desktop:build && electron-builder"
+  },
+  "dependencies": {
+    "@openai/codex": "0.153.4",
+    "electron-updater": "^6.8.9",
+    "express": "^5.2.1",
+    "node-notifier": "^10.0.1"
+  },
+  "overrides": {
+    "node-notifier": {
+      "uuid": "11.1.1"
+    }
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.2",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.63.0"
+  },
+  "main": "desktop-dist/main.cjs",
+  "build": {
+    "appId": "kr.baro.agentmessenger",
+    "productName": "Agent Messenger",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop-dist/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "identity": "-",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": true
+    },
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/windows-installer.nsh"
+    },
+    "artifactName": "agent-messenger-${version}-${os}-${arch}.${ext}",
+    "toolsets": {
+      "nsis": "1.2.1"
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://localhost:3000/downloads/apps/"
+      }
+    ],
+    "beforePack": "scripts/check-build-platform.cjs"
+  },
+  "description": "팀 에이전트 메신저",
+  "author": "Baro Team"
+}

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>에이전트 메신저</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#f7f8fa" />
+  <link rel="apple-touch-icon" href="/icon-192.png?v=2" />
+  <meta name="color-scheme" content="light dark" />
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/styles.css?v=20260915-responsive" />
+  <link rel="stylesheet" href="/workspace.css?v=4" />
+  <meta name="description" content="팀의 코드에 대해 각자의 AI 에이전트와 대화하는 공간" />
+  <link rel="icon" href="/icon-192.png?v=2" />
+</head>
+<body class="workspace">
+  <div id="startScreen" hidden>
+    <div class="start-card" id="startAuth">
+      <h1 class="brand"><span class="brand-mark" aria-hidden="true"><img src="/icon-192.png?v=2" width="36" height="36" alt="" /></span>에이전트 메신저</h1>
+      <h2 class="start-title">우리 팀의 코드,<br>대화로 연결해요</h2>
+      <p class="start-sub">궁금한 건 동료의 에이전트에게 물어보세요.<br>함께 일하는 새로운 방법을 시작해요.</p>
+      <p><a href="/start.html">Windows 설치·시작 안내 →</a></p>
+      <p id="startError" class="error" hidden></p>
+
+      <div class="start-tabs" role="tablist">
+        <button type="button" id="tabSignup" class="tab" role="tab" aria-selected="true">처음이에요</button>
+        <button type="button" id="tabLogin" class="tab" role="tab" aria-selected="false">로그인</button>
+        <button type="button" id="tabToken" class="tab" role="tab" aria-selected="false">토큰</button>
+      </div>
+
+      <form id="signupForm" class="start-form">
+        <input id="signupName" class="field" autocomplete="username" aria-label="가입 이름" placeholder="이름 (예: 예제사용자)" />
+        <input id="signupPassword" class="field" type="password" autocomplete="new-password"
+               aria-label="가입 비밀번호" placeholder="비밀번호 (8자 이상)" />
+        <p id="signupError" class="error" hidden></p>
+        <button type="submit" class="btn">계정 만들기</button>
+      </form>
+
+      <form id="loginForm" class="start-form" hidden>
+        <input id="loginName" class="field" autocomplete="username" aria-label="로그인 이름" placeholder="이름" />
+        <input id="loginPassword" class="field" type="password" autocomplete="current-password"
+               aria-label="로그인 비밀번호" placeholder="비밀번호" />
+        <p id="loginError" class="error" hidden></p>
+        <button type="submit" class="btn">로그인</button>
+      </form>
+
+      <form id="tokenForm" class="start-form" hidden>
+        <input id="tokenValue" class="field" type="password" autocomplete="off"
+               spellcheck="false" aria-label="접속 토큰" placeholder="받은 토큰" />
+        <p id="tokenError" class="error" hidden></p>
+        <button type="submit" class="btn">저장하고 시작</button>
+      </form>
+    </div>
+
+    <div class="start-card" id="tokenReveal" hidden>
+      <h1 class="brand">가입되었습니다</h1>
+      <p class="warn-text">데몬 설정에 이 토큰이 필요합니다. 복사해 두세요. 로그인 후 ‘데몬 토큰 보기’에서도 확인할 수 있습니다.</p>
+      <div class="token-box">
+        <code id="revealedToken"></code>
+        <button type="button" id="copyTokenBtn" class="btn-quiet">복사</button>
+      </div>
+      <p id="copyStatus" aria-live="polite"></p>
+      <button type="button" id="continueBtn" class="btn">대화 시작</button>
+    </div>
+  </div>
+
+  <button type="button" id="sidebarBackdrop" aria-label="대화 목록 닫기" hidden></button>
+  <aside id="sidebar" aria-label="대화 목록" hidden>
+    <div class="sidebar-heading">
+    <h1 class="brand"><span class="brand-mark" aria-hidden="true"><img src="/icon-192.png?v=2" width="36" height="36" alt="" /></span>에이전트 메신저</h1>
+
+    <button type="button" id="sidebarClose" class="btn-quiet" aria-label="대화 목록 닫기">닫기</button>
+    </div>
+    <div class="sidebar-actions">
+    <div class="new-thread">
+      <button id="newThreadBtn" class="btn-quiet">새 대화 시작</button>
+      <form id="newThreadForm" hidden>
+        <label for="newThreadTitle">대화 제목</label>
+        <input id="newThreadTitle" class="field" maxlength="80" autocomplete="off"
+               aria-label="새 스레드 제목" placeholder="어떤 이야기를 나눌까요?" />
+        <p id="newThreadError" class="error" hidden></p>
+        <div class="row">
+          <button type="button" id="newThreadCancel" class="btn-quiet">취소</button>
+          <button type="submit" class="btn">만들기</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="section-label">팀 대화</p>
+    <a href="/decisions.html" class="btn-quiet decision-inbox-link">내 결정 요청함 <span id="decisionCount"></span></a>
+    </div>
+    <nav id="threads" aria-label="스레드 목록"></nav>
+
+    <details class="members-panel" aria-label="가입한 팀원">
+      <summary class="section-label">팀원 <span id="memberCount"></span></summary>
+      <ul id="members"></ul>
+    </details>
+
+    <div id="identity">
+      <div class="account-line"><span class="account-avatar" aria-hidden="true">나</span><span id="accountName">내 계정</span><span class="account-caption">워크스페이스</span></div>
+      <div class="account-connections">
+      <div class="status-row">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">연결 중</span>
+      </div>
+      <div class="status-row">
+          <span class="dot" id="daemonDot"></span>
+          <span id="daemonText">데몬 상태 확인 중</span>
+        </div>
+      <button type="button" id="githubStatusButton" class="github-status-button" title="GitHub 연결 상태 확인"><span class="dot" id="githubStatusDot" aria-hidden="true"></span><span id="githubStatusText">GitHub 확인 중</span></button>
+      </div>
+
+
+      <details id="accountSettings" class="account-settings">
+        <summary aria-haspopup="dialog" aria-controls="settingsDialog"><span>에이전트 설정</span><span id="modelBrief" class="model-brief"></span></summary>
+      </details>
+    </div>
+  </aside>
+
+      <dialog id="settingsDialog" class="settings-popover" aria-labelledby="settingsTitle">
+      <div class="settings-heading"><strong id="settingsTitle">에이전트 설정</strong><button type="button" id="closeSettings" class="btn-quiet" aria-label="설정 닫기">닫기</button></div>
+      <div class="settings-body">
+      <p id="daemonHelp" class="panel-note"></p>
+      <div id="agentPanel">
+        <label class="panel-label" for="toolSelect">에이전트 도구</label>
+        <select id="toolSelect" class="field"></select>
+
+        <label class="panel-label" for="modelSelect">모델</label>
+        <select id="modelSelect" class="field"></select>
+        <p id="modelDetail" class="panel-note"></p>
+        <form id="customModelForm" hidden>
+          <input id="customModel" class="field" aria-label="모델 이름 직접 입력" placeholder="모델 이름" maxlength="40" required>
+          <button class="btn" type="submit">적용</button>
+        </form>
+
+        <div class="github-connection-panel">
+        <strong>GitHub 연동 · 선택 사항</strong>
+        <p class="panel-note">이슈·변경 요청(PR)·변경 이력을 확인할 때 연결합니다. 내 PC 자료 공유에는 필요하지 않습니다.</p>
+        <button type="button" id="githubConnect" class="btn-quiet">GitHub 연결하기</button>
+        <p id="githubConnectionStatus" class="panel-note" role="status"></p>
+        <button type="button" id="githubRefresh" class="btn-quiet" style="margin-top:8px">연결 상태 확인</button>
+        <a id="githubNextStep" class="download-link" href="/decisions.html" hidden>다음 단계 · 내 파일 승인 요청 확인 →</a>
+        </div>
+        <p id="settingsStatus" class="panel-note" aria-live="polite"></p>
+      </div>
+
+      <details id="sharingSettings" class="sharing-settings">
+        <summary>업무 폴더</summary>
+        <p class="panel-note">업무 폴더는 추가 승인 없이 읽습니다. 실제 연결된 관련 패키지는 현재 대화에서 함께 확인하며, 그 밖의 자료는 소유자에게 묻습니다. 비밀 값은 가리고 수정·삭제는 실행하지 않습니다.</p>
+        <p id="sharingStatus" class="panel-note" role="status"></p>
+        <div id="sharingPolicies" class="sharing-policies"></div>
+        <button id="workFolderAdd" type="button" class="btn-quiet" hidden>업무 폴더 지정</button>
+        <form id="sharingForm" hidden>
+          <fieldset><legend>읽을 수 있는 사람 · 직접 선택</legend><div id="sharingAudience" class="sharing-audience"></div></fieldset>
+          <label class="panel-label" for="sharingScope">공유할 대화 범위</label>
+          <select id="sharingScope" name="scope" class="field"><option value="thread">현재 대화에서만</option><option value="all">선택한 사람과의 모든 대화</option></select>
+          <label class="sharing-check"><input id="sharingConfirm" type="checkbox" name="confirm" required><span>선택한 사람에게 위 범위에서 읽기를 허용합니다. 폴더는 앞으로 추가될 하위 파일도 포함하며, 수정·삭제는 허용하지 않습니다.</span></label>
+          <div class="sharing-actions"><button class="btn-quiet" type="submit" name="kind" value="directory">폴더 선택</button><button class="btn-quiet" type="submit" name="kind" value="file">파일 선택</button></div>
+        </form>
+        <button id="sharingRefresh" type="button" class="btn-quiet">공유 목록 새로고침</button>
+      </details>
+      <a href="/downloads/agent-messenger.zip" class="download-link" download>데몬 다운로드 <span aria-hidden="true">↗</span></a>
+      <a href="/start.html" class="download-link">Windows 설치 안내 <span aria-hidden="true">↗</span></a>
+      <button type="button" id="showTokenBtn" class="btn-quiet">데몬 토큰 보기</button>
+      <div class="token-box" id="sidebarTokenBox" hidden>
+        <code id="sidebarToken"></code>
+        <button type="button" id="sidebarCopyBtn" class="btn-quiet">복사</button>
+      </div>
+      <p id="sidebarCopyStatus" aria-live="polite"></p>
+      <button type="button" id="logoutBtn" class="btn-quiet">로그아웃</button>
+      </div>
+      </dialog>
+
+  <main id="main" hidden>
+    <div class="appearance-bar">
+      <div class="workspace-heading"><button type="button" id="sidebarToggle" class="btn-quiet" aria-controls="sidebar" aria-expanded="false"><span aria-hidden="true">☰</span> 대화 목록</button><span class="workspace-label">팀 워크스페이스</span></div>
+      <button type="button" id="themeToggle" class="theme-toggle" role="switch" aria-label="다크 모드" aria-checked="false"><span aria-hidden="true">다크 모드</span><span class="theme-switch" aria-hidden="true"></span></button>
+    </div>
+    <header id="threadHeader" hidden>
+      <div class="thread-heading"><h2 id="threadTitle"></h2>
+      <span id="threadMeta"></span></div>
+      <div class="thread-actions">
+      <button type="button" id="summaryToggle" class="btn-quiet" aria-expanded="false" aria-controls="sharedSummary" hidden>대화 정리</button>
+      <button type="button" id="deleteThreadBtn" class="btn-quiet" title="내 목록에서 대화 삭제">대화 삭제</button>
+      <button type="button" id="resolveBtn" class="btn-quiet">해결됨</button>
+      </div>
+    </header>
+
+    <div id="scroll">
+    <section id="sharedSummary" aria-labelledby="sharedSummaryTitle" hidden><h3 id="sharedSummaryTitle">대화 정리</h3><div id="sharedDecisions"></div><div id="sharedSummaryBody"></div></section>
+    <div id="conversationContext">
+    <section id="resourceRequests" class="resource-requests" aria-label="자료 요청 상태" hidden></section>
+    <section id="githubRequestStatus" class="github-request-status" hidden aria-live="polite">
+      <strong>파일 요청 · GitHub 연결 확인</strong>
+      <p id="githubRequestDetail"></p>
+      <div class="options">
+        <button type="button" id="githubRequestConnect" class="btn-quiet">내 GitHub 연결하기</button>
+        <button type="button" id="githubRequestRefresh" class="btn-quiet">연결 상태 다시 확인</button>
+        <a id="githubRequestApproval" class="btn-quiet" href="/decisions.html" hidden>내 승인 요청 확인 →</a>
+      </div>
+    </section>
+    <div id="banner" role="status" hidden>
+      <p id="bannerText"></p>
+      <button id="resumeBtn" class="btn">계속 진행</button>
+    </div>
+
+    </div>
+      <div class="stream" id="stream">
+        <div id="messages"></div>
+        <div id="pending" aria-live="polite" hidden>
+          <div id="pendingText"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="latest-bar"><button type="button" id="latestMessage" hidden aria-live="polite">최신 대화로 이동 ↓</button></div>
+    <form id="composer" hidden>
+      <div class="composer-row">
+        <div id="mentionMenu" role="listbox" aria-label="멘션할 팀원" hidden></div>
+        <textarea id="input" class="field" rows="1" aria-label="메시지" aria-autocomplete="list" aria-controls="mentionMenu"
+                  placeholder="메시지를 입력하세요. @이름으로 에이전트를 부를 수 있어요."></textarea>
+        <button type="button" id="privateToggle" class="btn-quiet" aria-pressed="false">🔒 혼잣말</button>
+        <button type="submit" id="send" class="btn">보내기</button>
+      </div>
+      <div class="mention-target" id="mentionTarget" hidden>
+        <div class="route-modes" role="group" aria-label="메시지 전달 방식">
+          <button type="button" data-route-mode="auto" aria-pressed="true">자동</button>
+          <button type="button" data-route-mode="direct" aria-pressed="false">직접 대화</button>
+          <button type="button" data-route-mode="agents" aria-pressed="false">에이전트 지정</button>
+        </div>
+        <div id="routePeople" role="group" aria-label="요청할 에이전트" hidden></div>
+        <span id="mentionTargetText" aria-live="polite"></span>
+      </div>
+      <p id="composerError" class="error" hidden></p>
+      <p class="hint" id="composerHint"><span id="publicHint">보낼 대상을 확인해 주세요 · @이름으로 대상 변경 · Shift+Enter 줄바꿈</span><span id="privateHint" hidden>🔒 혼잣말 모드입니다 — 이 메시지는 나에게만 보입니다. 다시 눌러 끌 수 있습니다.</span></p>
+    </form>
+  </main>
+
+  <script type="module" src="./app.js?v=20260915-resource-colors"></script>
+</body>
+</html>

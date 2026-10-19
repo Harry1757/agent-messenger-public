@@ -1,0 +1,35 @@
+body.inbox-page{display:block;height:auto;min-height:100dvh;overflow:auto}
+.inbox-shell{max-width:700px;margin:0 auto;padding:32px 24px 40px;word-break:keep-all;overflow-wrap:anywhere}
+.inbox-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.eyebrow{font-size:12px;color:var(--accent-ink);font-weight:700;margin:0 0 8px}
+.inbox-header h1{margin:0;font-size:24px;letter-spacing:-.05em}
+.inbox-description{color:var(--ink-2);margin:20px 0 16px}
+#connection{color:var(--ink-3);font-size:12px;min-height:20px}
+#feedback{padding:14px 18px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink)}
+.request-card{padding:22px;margin:16px 0;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.request-card h2{font-size:18px;line-height:1.5;margin:12px 0 20px}
+.request-card .tag{font-size:12px;color:var(--accent-ink);background:var(--accent-soft);padding:5px 10px;border-radius:8px;display:inline-block}
+.request-card h3{font-size:12px;color:var(--ink-3);margin:18px 0 6px}
+.request-card p{white-space:pre-wrap}
+.request-card .summary{margin:0;line-height:1.8}
+.recommendation{padding:14px 16px;background:var(--bg);border-radius:12px;margin:18px 0}
+.choices{display:grid;gap:10px;margin:22px 0 16px}
+.choices button{height:auto;min-height:40px;padding:10px 14px;white-space:normal;text-align:left;justify-content:flex-start;line-height:1.6;overflow-wrap:anywhere}
+.request-card label{display:block;font-size:13px;font-weight:600;margin:14px 0 8px}
+.request-card textarea{resize:vertical;min-height:86px}
+.request-card form .btn{margin-top:10px}
+.request-card details{margin:18px 0;color:var(--ink-2);font-size:13px}
+.request-card summary{cursor:pointer}
+.request-card .context-message{padding:12px 0;border-bottom:1px solid var(--line);white-space:pre-wrap}
+.request-card a,footer a{color:var(--accent-ink)}
+.empty-state{padding:50px 12px;text-align:center;font-size:18px;font-weight:650}
+.empty-state span{font-size:14px;font-weight:400;color:var(--ink-3)}
+footer{color:var(--ink-3);font-size:12px;line-height:1.8;margin-top:26px}
+@media(max-width:480px){.inbox-shell{padding:22px 16px}.request-card{padding:20px}.inbox-header h1{font-size:24px}.inbox-header .btn-quiet{padding:0 12px}}
+
+.inbox-nav{margin-bottom:20px}
+.inbox-back{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;margin-left:-12px;border-radius:10px;color:var(--ink-2);font-size:14px;font-weight:600;text-decoration:none}
+.inbox-back:hover{background:var(--accent-soft);color:var(--accent-ink)}
+.inbox-back:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.request-card .summary{white-space:pre-wrap;overflow-wrap:anywhere}

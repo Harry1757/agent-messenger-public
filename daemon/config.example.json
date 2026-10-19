@@ -1,0 +1,7 @@
+{
+  "token": "여기에 내 토큰",
+  "agentName": "예제사용자",
+  "tool": "claude",
+  "workspace": "./your-project",
+  "serverUrl": "http://localhost:3000"
+}

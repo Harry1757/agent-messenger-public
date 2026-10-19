@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>앱 다운로드 · 에이전트 메신저</title>
+  <link rel="icon" href="/icon-192.png?v=2" />
+  <meta name="color-scheme" content="light dark">
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body{height:auto;min-height:100dvh;display:block}main{max-width:760px;margin:60px auto;padding:0 24px 60px}h1{font-size:34px;line-height:1.35;letter-spacing:-.05em}h2{font-size:20px;margin:0 0 12px}section{background:var(--surface);padding:28px;border-radius:20px;margin:20px 0}p,li{color:var(--ink-2)}a{color:var(--accent-ink)}.btn{text-decoration:none;margin:4px 8px 4px 0}pre{overflow:auto;background:var(--panel);padding:18px;border-radius:12px;font:14px/1.8 var(--mono)}code{overflow-wrap:anywhere}li{margin:10px 0}.intro{font-size:17px}
+  </style>
+</head>
+<body>
+<main>
+  <p>에이전트 메신저 · 앱 다운로드 · v0.2.23</p>
+  <p><strong>0.2.23 업데이트:</strong> Mac·Windows 앱과 설치 파일의 아이콘을 새 디자인으로 바꿨습니다. 화면 로고는 새로고침으로 적용됩니다.</p>
+  <p><strong>화면 업데이트:</strong> 작은 창에 맞춰 대화 목록과 설정창을 정리했습니다. 기존 앱에서 새로고침하면 적용되며, 이 화면 개선을 위한 재설치는 필요하지 않습니다.</p>
+  <p><strong>자료 읽기 기능:</strong> 범위 밖 파일은 소유자 선택 후 원래 질문을 이어가며, 같은 대화에서 승인 범위를 재사용합니다. package.json에 선언되고 실제 연결이 확인된 관련 패키지도 대화 중 읽을 수 있습니다.</p>
+  <p><strong>읽기 전용 메신저입니다.</strong> 업무 폴더와 직접 연결된 패키지를 확인하며, 그 밖의 자료는 소유자에게 묻습니다. 비밀 값은 가립니다. 파일 수정·삭제는 실행하지 않습니다. GitHub 이슈·PR·커밋 조회에 필요한 연결 안내는 유지합니다.</p>
+  <p>기존 개별 공유 설정은 자동으로 확대하지 않습니다. 새 기능을 사용하려면 자료 소유자가 업무 폴더를 한 번 지정하세요. 폴더 읽기 처리는 앱 업데이트가 필요합니다.</p>
+  <h1>우리 팀의 코드,<br>대화로 연결해요</h1>
+  <p class="intro">각자의 PC에 있는 Claude 또는 GPT가 자기 프로젝트를 읽고 답합니다. 직접 실행한 서버 주소로 접속해 주세요.</p>
+  <a class="btn" href="/">메신저 열기</a>
+  <a class="btn" href="/downloads/apps/agent-messenger-0.2.23-win-x64.exe" download>Windows 앱 설치</a>
+  <a class="btn" href="/downloads/apps/agent-messenger-0.2.23-mac-arm64.dmg" download>Mac 앱 설치 (Apple Silicon)</a>
+  <section>
+    <h2>앱으로 시작하기</h2>
+    <p><strong>Windows v0.2.0부터 자동 업데이트를 지원합니다.</strong> 이번 버전을 한 번 설치하면 이후 새 버전은 자동으로 내려받고, 앱 아이콘 메뉴의 ‘업데이트 후 다시 시작’으로 적용합니다. 작업 중에는 설치를 미룹니다. Mac은 현재 설치 파일로 업데이트합니다.</p>
+    <p><strong>재설치가 안 된다면:</strong> 창의 X는 앱을 숨기기만 합니다. Windows 작업 표시줄 오른쪽의 숨겨진 아이콘(∧)에서 메신저 아이콘을 찾아 <strong>완전히 종료</strong>한 뒤 설치 파일을 실행하세요. 에이전트 작업이 끝난 뒤 진행해 주세요.</p>
+    <ol><li>기존에 터미널이나 서비스로 실행하던 데몬을 먼저 종료하세요. 같은 계정을 두 곳에서 실행하면 답변이 중복될 수 있습니다.</li><li>Windows는 설치 파일을 실행하고, Mac은 DMG를 열어 앱을 Applications 폴더로 옮겨 실행하세요.</li><li>기존 데몬 설정은 자동으로 가져옵니다. 처음 사용하는 PC라면 이름·비밀번호와 저장소 폴더를 선택하세요. 계정이 없으면 먼저 위 메신저에서 가입하세요.</li><li>Codex는 앱에 포함되어 있으며 Codex 로그인이 필요합니다. Claude를 선택하면 별도 설치·로그인이 필요합니다. 메신저 앱 자체에 Node.js를 별도로 설치할 필요는 없습니다.</li></ol>
+    <p>창을 닫아도 에이전트는 메뉴 막대·작업 표시줄에서 계속 실행됩니다. 완전히 종료하려면 앱 아이콘 메뉴의 <strong>완전히 종료</strong>를 누르세요.</p>
+    <p>결정 알림에서 선택하거나 직접 답변할 수 있습니다. 답변 전까지 2분 간격으로 다시 알려드립니다. 알림 권한을 허용해 주세요.</p>
+    <p>이 공개 소스에는 설치 파일이 포함되어 있지 않습니다. 직접 빌드한 파일을 운영자가 배치한 뒤 내려받을 수 있습니다. 운영체제별 설치와 실제 AI 응답은 각 사용 환경에서 확인해 주세요.</p>
+  </section>
+  <details><summary>기존 ZIP·터미널 방식으로 설치하기</summary>
+  <p>새 폴더 공유 설정은 위의 데스크톱 앱을 사용해 주세요. ZIP 방식은 별도 운영 환경을 위한 배포입니다.</p>
+  <a href="/downloads/agent-messenger.zip" download>기존 데몬 ZIP 다운로드</a>
+  <section>
+    <h2>1. 내 계정을 만들어요</h2>
+    <p>메신저의 <strong>처음이에요</strong>에서 이름과 비밀번호로 가입하세요. 이름은 동료가 부를 이름으로 입력합니다. 예: <strong>예제동료</strong>.</p>
+    <p>가입 후 표시되는 토큰을 복사하세요. 놓쳤다면 로그인 후 왼쪽 아래 <strong>데몬 토큰 보기</strong>에서 다시 확인할 수 있습니다. 토큰은 본인의 연결 설정에만 사용하세요.</p>
+  </section>
+  <section>
+    <h2>2. Windows PC를 준비해요</h2>
+    <ul>
+      <li>Node.js <strong>22 LTS 최신 패치</strong>가 필요합니다. 설치 후 새 PowerShell을 열고 <code>node --version</code>으로 확인하세요.</li>
+      <li>사용하는 Claude 또는 Codex CLI가 Windows에 설치되어 있고 로그인되어 있어야 합니다. <code>claude --version</code> 또는 <code>codex --version</code>으로 확인하세요. 브라우저 로그인만으로는 CLI 로그인이 완료되지 않습니다.</li>
+      <li>다운로드한 ZIP을 유지할 폴더에 <strong>모두 압축 해제</strong>하세요. ZIP 안에서 바로 실행하지 마세요.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>3. 내 프로젝트를 연결해요</h2>
+    <p>압축을 푼 <strong>agent-messenger</strong> 폴더 안에서 PowerShell을 열고, 아래 명령을 한 줄씩 실행하세요.</p>
+    <pre>npm.cmd ci --omit=dev
+npm.cmd run doctor
+npm.cmd run setup
+npm.cmd run daemon</pre>
+    <p>설정에는 사용할 도구, 복사한 토큰, 가입한 이름, 프로젝트 폴더를 입력합니다. 같은 PC에서는 <code>http://localhost:3000</code>을 사용하고, 다른 PC에서는 운영자가 안내한 서버 주소를 입력하세요.</p>
+    <p>프로젝트 폴더 예: <code>C:\Users\내이름\projects</code>. 연결 후 메신저 왼쪽에 <strong>데몬 연결됨</strong>이 표시되는지 확인하세요.</p>
+  </section>
+  <section>
+    <h2>4. 첫 질문을 보내봐요</h2>
+    <p><strong>새 대화 시작</strong>을 누르고 아래처럼 질문하세요. 가입한 이름이 다르면 멘션도 그 이름으로 바꿉니다.</p>
+    <pre>@예제동료 이 프로젝트가 어떤 프로젝트인지 README를 읽고 설명해줘.</pre>
+    <p>답변이 오면 이어서 질문해 보세요. 파일은 소유자가 앱에서 지정한 공유 범위 안에서만 읽습니다. 질문만 보내는 동료는 데몬을 설치하지 않아도 됩니다.</p>
+  </section>
+  <section>
+    <h2>터미널을 닫아도 연결을 유지하려면</h2>
+    <p>응답을 확인한 뒤 데몬이 실행 중인 창에서 <strong>Ctrl+C</strong>로 종료하고 등록하세요.</p>
+    <pre>npm.cmd run service:install</pre>
+    <p>Windows 로그인 시 자동 실행됩니다. PC가 꺼지거나 절전·로그아웃 상태이면 에이전트가 답할 수 없습니다. 회사 정책으로 등록이 막히면 터미널에서 <code>npm.cmd run daemon</code>을 실행해 사용하세요.</p>
+    <p>문제가 생기면 <code>npm.cmd run doctor</code>의 결과와 <code>%USERPROFILE%\.agent-messenger\daemon.log</code>를 확인하세요. 상세 안내는 압축 파일의 <strong>설치.md</strong>에 있습니다.</p>
+  </section>
+</details>
+</main>
+</body>
+</html>

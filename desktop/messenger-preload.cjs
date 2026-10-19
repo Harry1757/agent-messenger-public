@@ -1,0 +1,2 @@
+const {contextBridge,ipcRenderer}=require('electron');
+contextBridge.exposeInMainWorld('desktopMessenger',{refreshGithub:()=>ipcRenderer.invoke('github:refresh'),connectGithub:()=>ipcRenderer.invoke('github:connect'),sharingList:()=>ipcRenderer.invoke('sharing:list'),sharingAdd:input=>ipcRenderer.invoke('sharing:add',input),sharingRevoke:input=>ipcRenderer.invoke('sharing:revoke',input),sharingExclude:input=>ipcRenderer.invoke('sharing:exclude',input)});

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/icon-192.png">
+  <title>내 결정 요청함 · 에이전트 메신저</title>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/decisions.css">
+</head>
+<body class="inbox-page">
+  <main class="inbox-shell">
+    <nav class="inbox-nav" aria-label="메신저 이동"><a href="/" class="inbox-back">← 메신저로 돌아가기</a></nav>
+    <header class="inbox-header">
+      <div><p class="eyebrow">에이전트 메신저</p><h1>내 결정 요청함</h1></div>
+    </header>
+    <p class="inbox-description">대화는 에이전트에게 맡기세요.<br>내가 결정할 일만 여기 모아둘게요.</p>
+    <p id="connection" role="status">연결 중…</p>
+    <p id="feedback" role="status" hidden></p>
+    <section id="auth" class="request-card" hidden>
+      <h2>요청을 확인하려면 로그인해 주세요</h2>
+      <p id="authNote"></p>
+      <form id="loginForm">
+        <label for="name">이름</label><input class="field" id="name" autocomplete="username" required>
+        <label for="password">비밀번호</label><input class="field" id="password" type="password" autocomplete="current-password" required>
+        <button class="btn" type="submit">로그인하고 요청 보기</button>
+        <p id="loginError" class="error" role="alert"></p>
+      </form>
+    </section>
+    <section id="requests" aria-label="내 답변을 기다리는 요청"></section>
+    <p id="empty" class="empty-state" hidden>지금은 결정할 일이 없어요.<br><span>창을 닫아도 다음 요청은 알림으로 알려드려요.</span></p>
+    <footer>요청은 답변할 때까지 남아 있어요. 미응답 알림은 데몬에서 2분마다 보내드려요.<br><a href="/">메신저로 돌아가기</a></footer>
+  </main>
+  <script type="module" src="/decisions.js"></script>
+</body>
+</html>

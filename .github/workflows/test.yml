@@ -1,0 +1,47 @@
+name: Cross-platform checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Build runtime helpers before testing
+        run: npm run desktop:build
+      # os.tmpdir() otherwise uses RUNNER~1, while .NET expands the same path
+      # to runneradmin. Use one unambiguous path without relaxing access checks.
+      - name: Use canonical Windows test directory
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $testTemp = Join-Path $env:RUNNER_TEMP 'messenger-tests'
+          New-Item -ItemType Directory -Force -Path $testTemp | Out-Null
+          "TEMP=$testTemp" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "TMP=$testTemp" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - run: npm test
+      - run: npm run package:daemon
+      - name: Windows package install and PowerShell syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $errors = $null
+          $tokens = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/windows-service.ps1), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count) { throw ($errors | Out-String) }
+          Expand-Archive web/downloads/agent-messenger.zip "$env:RUNNER_TEMP\메신저 설치"
+          Set-Location "$env:RUNNER_TEMP\메신저 설치\agent-messenger"
+          npm.cmd ci --omit=dev
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          npm.cmd run doctor
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daemon-${{ matrix.os }}
+          path: web/downloads/agent-messenger.zip

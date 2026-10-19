@@ -1,0 +1,11 @@
+services:
+  server:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/data
+      - ./app-downloads:/app/web/downloads/apps:ro
+    environment:
+      USERS: "${USERS:-}"

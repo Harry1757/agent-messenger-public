@@ -1,0 +1,12 @@
+.superpowers/
+node_modules/
+*.db
+.env
+data/
+.playwright-mcp/
+web/downloads/*.zip
+desktop-dist/
+release/
+app-downloads/
+
+.serena/

@@ -1,0 +1,11 @@
+node_modules
+data
+.git
+.superpowers
+test
+.playwright-mcp
+web/downloads
+
+release
+desktop-dist
+app-downloads

@@ -1,0 +1,6 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {FileApprovals,type FileProposal} from '../daemon/file-approval.ts';
+const proposal:FileProposal={id:'id',owner:'owner',requester:'peer',threadId:'t',audience:['owner','peer'],operation:'read',path:'/project/a.ts',expiresAt:100};
+test('owner-only and one-use exact operation approval',()=>{const a=new FileApprovals();assert.throws(()=>a.approve(proposal,'peer',1));const n=a.approve(proposal,'owner',1);a.consume(n,proposal,['peer','owner'],2);assert.throws(()=>a.consume(n,proposal,proposal.audience,3));});
+test('approval never promotes read to write/delete or changes path/content/audience',()=>{for(const change of [{operation:'write',content:'new'},{operation:'delete'},{path:'/private/a'},{threadId:'other'},{content:'altered'},{beforeHash:'changed'}]){const a=new FileApprovals(),n=a.approve(proposal,'owner',1);assert.throws(()=>a.consume(n,{...proposal,...change} as FileProposal,proposal.audience,2));}const a=new FileApprovals(),n=a.approve(proposal,'owner',1);assert.throws(()=>a.consume(n,proposal,['owner','peer','stranger'],2));});
+test('expired approvals cannot be issued or consumed',()=>{const a=new FileApprovals();assert.throws(()=>a.approve(proposal,'owner',100));const n=a.approve(proposal,'owner',1);assert.throws(()=>a.consume(n,proposal,proposal.audience,100));});
